@@ -2,19 +2,13 @@ import argon2 from 'argon2';
 import UserService from '../services/userServices';
 import JWTHelper from '../utility/jwt';
 import {
-//   emailValidation,
   signupValidation,
   loginValidation,
-//   passwordValidation,
 } from '../validation/userValidation';
 
 const {
-//   getUsers,
   createUser,
   findUser,
-//   findById,
-//   updateUser,
-//   deleteUser,
 } = UserService;
 
 const { generateToken } = JWTHelper;
@@ -50,7 +44,17 @@ export default class UserController {
           token,
         });
       }
+      return res.status(400).json({
+        status: 400,
+        error: 'User not created'
+      });
     } catch (error) {
+      if (error.code === 11000) {
+        return res.status(409).json({
+          status: 409,
+          error: 'Sorry, data already exist.'
+        });
+      }
       return res.status(500).json({
         error: true,
         message: 'server error.',
