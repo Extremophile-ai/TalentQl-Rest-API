@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/Extremophile-ai/TalentQl-Rest-API/badge.svg?branch=main)](https://coveralls.io/github/Extremophile-ai/TalentQl-Rest-API?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/Extremophile-ai/TalentQl-Rest-API/badge.svg?branch=staging)](https://coveralls.io/github/Extremophile-ai/TalentQl-Rest-API?branch=staging)
 
 # TalentQl-Rest-API-Test-Project
 
