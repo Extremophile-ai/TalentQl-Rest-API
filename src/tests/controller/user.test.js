@@ -149,41 +149,4 @@ describe('Should handle correct user behaviour', async () => {
         });
     });
   });
-  // describe("should handle single user's operation", () => {
-  // let userToken;
-  // before((done) => {
-  //   chai
-  //     .request(server)
-  //     .post('/user/login')
-  //     .set('Accept', 'application/json')
-  //     .send(user3)
-  //     .end((err, res) => {
-  //       if (err) throw err;
-  //       userToken = res.body.token;
-  //       done();
-  //     });
-  // });
-  // it('/user should get single user details.', (done) => {
-  //   chai
-  //     .request(server)
-  //     .get('/user')
-  //     .set('Authorization', `Bearer ${userToken}`)
-  //     .set('Accept', 'application/json')
-  //     .end((err, res) => {
-  //       res.should.have.status(200);
-  //       res.body.should.have.property('message').eql('user retrieved.');
-  //       done();
-  //     });
-  // });
-  // it("it should not update a user's profile who is not signed in", (done) => {
-  //   chai
-  //     .request(server)
-  //     .patch('/user/update/profile')
-  //     .send(profile)
-  //     .end((err, res) => {
-  //       res.should.have.status(401);
-  //       res.body.should.have.property('message').eql('Sorry, you have to login.');
-  //       done();
-  //     });
-  // });
 });
