@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/Extremophile-ai/TalentQl-Rest-API/badge.svg?branch=main)](https://coveralls.io/github/Extremophile-ai/TalentQl-Rest-API?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/Extremophile-ai/TalentQl-Rest-API/badge.svg?branch=staging)](https://coveralls.io/github/Extremophile-ai/TalentQl-Rest-API?branch=staging)
 
 # TalentQl-Rest-API-Test-Project
 
@@ -14,7 +14,7 @@
 `npm run start` starts and builds the server in a production environment
 
 ## Documentation
-- Postman Documentation can be found here: `https://www.getpostman.com/collections/fbc02477f84fde77b587`
+- Postman Documentation can be found here: `https://documenter.getpostman.com/view/10554388/TzJu8cEa`
 
 ## HTTP Requests
 All API requests are made by sending a secure HTTPS request using one of the following methods:
