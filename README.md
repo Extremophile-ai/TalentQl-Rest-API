@@ -22,13 +22,14 @@ All API requests are made by sending a secure HTTPS request using one of the fol
 - POST Creates a new resource.
 - GET Gets a resource or list of resources.
 - PATCH updates a resource.
-- DELETE deletes a resource. x
+- DELETE deletes a resource.
 > For POST, the body of your request must be a JSON payload.
 
 ## HTTP Response Codes
 Each response will be returned with one of the following HTTP status codes:
 - 201 OK: Resource created successfully.
 - 200 OK: Successful request.
+- 204 Ok: Successful request but no resource to send as a response
 - 400 Bad Request: There was a problem with the request.
 - 404 Resource not found: Requested resource does not exist.
 - 409 Conflict: There's an already existing resource.
