@@ -1,4 +1,5 @@
 [![Coverage Status](https://coveralls.io/repos/github/Extremophile-ai/TalentQl-Rest-API/badge.svg?branch=staging)](https://coveralls.io/github/Extremophile-ai/TalentQl-Rest-API?branch=staging)
+[![Node.js CI](https://github.com/Extremophile-ai/TalentQl-Rest-API/actions/workflows/nodejs.yml/badge.svg)](https://github.com/Extremophile-ai/TalentQl-Rest-API/actions/workflows/nodejs.yml)
 
 # TalentQl-Rest-API-Test-Project
 
