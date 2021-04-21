@@ -68,7 +68,7 @@ export default class PostsService {
     }
   }
 
-  static async viewOtherUsersPost(postId) {
+  static async checkPost(postId) {
     try {
       return await User.find({
         'posts._id': postId

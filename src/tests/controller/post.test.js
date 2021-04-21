@@ -106,7 +106,7 @@ describe('should handle single user posts functionality', () => {
         .send(post2)
         .end((err, res) => {
           res.should.have.status(401);
-          res.body.should.have.property('message').eql("you're. not allowed to edit this post.");
+          res.body.should.have.property('message').eql("you're not allowed to edit this post.");
           done();
         });
     });
@@ -146,7 +146,7 @@ describe('should handle single user posts functionality', () => {
     it('/posts/delete_post/:postId cannot delete non-existent posts', (done) => {
       chai
         .request(server)
-        .delete('/posts/delete_post/605f83b5fg67ca5d6b515af8')
+        .delete('/posts/delete_post/60382dd567c98f38dc9c8fb4')
         .set('Authorization', `Bearer ${userToken}`)
         .end((err, res) => {
           res.should.have.status(404);
@@ -156,7 +156,20 @@ describe('should handle single user posts functionality', () => {
           done();
         });
     });
-    it('/posts/delete_post/:postId should let logged in users delete their posts', (done) => {
+    it("/posts/delete_post/:postId should not let authenticated users delete posts they don't own", (done) => {
+      chai
+        .request(server)
+        .delete('/posts/delete_post/60382dd567c98f39dc9c8fb4')
+        .set('Authorization', `Bearer ${userToken}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have
+            .property('message')
+            .eql("you're not allowed to delete this post.");
+          done();
+        });
+    });
+    it('/posts/delete_post/:postId should let logged in users delete their own posts', (done) => {
       chai
         .request(server)
         .delete('/posts/delete_post/605f83b5ba67ca5d6b515af8')
