@@ -18,6 +18,12 @@ const User = {
       _id: '60382dd567c98f15dc9c8fb4',
       email: 'wisdom@gmail.com',
       password: '$argon2i$v=19$m=4096,t=3,p=1$oJtM82Opu9BzS2YXp3sAsg$yXZKaZnTxbOCB369Ke8m+6GncMg8s5jGjo8Zduv4Zt8',
+      posts: [
+        {
+          _id: '60382dd567c98f39dc9c8fb4',
+          post: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the  standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged,'
+        }
+      ],
       createdAt: new Date(),
       updatedAt: new Date()
     }

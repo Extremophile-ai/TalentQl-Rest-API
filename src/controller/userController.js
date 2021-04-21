@@ -1,5 +1,4 @@
 import argon2 from 'argon2';
-// import UserService from '../services/userServices';
 import { PostsService, UserService } from '../services/index';
 import JWTHelper from '../utility/jwt';
 import {
@@ -14,7 +13,7 @@ const {
   updateUserProfile,
 } = UserService;
 
-const { getAllPosts, viewOtherUsersPost } = PostsService;
+const { getAllPosts, checkPost } = PostsService;
 
 const { generateToken } = JWTHelper;
 
@@ -138,7 +137,7 @@ export default class UserController {
   static async viewPost(req, res) {
     try {
       const { postId } = req.params;
-      const posts = await viewOtherUsersPost(postId);
+      const posts = await checkPost(postId);
       if (!posts || (posts.length <= 0)) {
         return res.status(404).json({
           error: true,

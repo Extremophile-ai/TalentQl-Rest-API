@@ -4,7 +4,8 @@ const {
   publishNewPost,
   editPost,
   findPostById,
-  deletePost
+  deletePost,
+  checkPost
 } = PostsService;
 
 export default class PostController {
@@ -70,11 +71,11 @@ export default class PostController {
         });
       } else {
         // confirm user owns a post he wants to edit
-        const checkPost = await findPostById(_id, postId);
-        if (checkPost.posts.length <= 0) {
+        const ownPost = await findPostById(_id, postId);
+        if (ownPost.posts.length <= 0) {
           return res.status(401).json({
             error: true,
-            message: "you're. not allowed to edit this post."
+            message: "you're not allowed to edit this post."
           });
         } else {
           const editDetails = {
@@ -100,17 +101,30 @@ export default class PostController {
     const { postId } = req.params;
     const { _id } = req.decoded.user;
     try {
-      const destroyPost = await deletePost(_id, postId);
-      if (destroyPost.nModified === 1) {
-        return res.status(200).json({
-          success: true,
-          message: 'post deleted successfully.'
+      // check if post exist
+      const findPost = await checkPost(postId);
+      if (findPost.length === 0) {
+        return res.status(404).json({
+          error: true,
+          message: 'post not found.'
         });
+      } else {
+        // check ownership of post to be deleted
+        const ownPost = await findPostById(_id, postId);
+        if (ownPost.posts.length <= 0) {
+          return res.status(401).json({
+            error: true,
+            message: "you're not allowed to delete this post."
+          });
+        }
+        const destroyPost = await deletePost(_id, postId);
+        if (destroyPost.nModified === 1) {
+          return res.status(200).json({
+            success: true,
+            message: 'post deleted successfully.'
+          });
+        }
       }
-      return res.status(404).json({
-        error: true,
-        message: 'post not found.'
-      });
     } catch (error) {
       return res.status(500).json({
         error: true,
