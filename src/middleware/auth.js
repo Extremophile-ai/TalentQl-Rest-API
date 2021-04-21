@@ -10,7 +10,7 @@ export default class Authentication {
       let decoded;
       if (authorization) {
         try {
-          const token = req.headers.authorization.split(' ')[1];
+          const token = authorization.split(' ')[1];
           decoded = jwt.verify(token, process.env.JWT_KEY);
         } catch (error) {
           return res.status(410).json({

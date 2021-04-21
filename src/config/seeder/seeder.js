@@ -16,7 +16,6 @@ const data = [
 ];
 
 // seeder.connect(process.env.DEV_MONGO_URI, options, () => {
-
 seeder.connect(process.env.TEST_MONGO_URI, options, () => {
 // load models
   seeder.loadModels([
@@ -28,11 +27,9 @@ seeder.connect(process.env.TEST_MONGO_URI, options, () => {
     // Callback to populate DB once collections have been cleared
     seeder.populateModels(data, (err, done) => {
       if (done) {
-        console.log('seeding done');
-      }
-      if (err) {
-        console.log(err);
-        return err;
+        done();
+      } else if (err) {
+        err();
       }
       seeder.disconnect();
     });

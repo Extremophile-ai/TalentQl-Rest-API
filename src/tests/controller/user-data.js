@@ -19,6 +19,10 @@ const userC = {
   password: 'Bigjoe808@',
 };
 
+const userD = {
+
+};
+
 const user2 = {
   email: 'Bigjoe@gmail.com',
   password: 'Bigjoe808@',
@@ -34,6 +38,12 @@ const user2B = {
 const user2C = {
   email: 'OluwaBurnagmail.com',
   password: 'Bigjoe808@',
+};
+
+const profile = {
+  firstName: 'joseph',
+  lastNae: 'james',
+  phone: '+2337806589065'
 };
 
 const user2D = {
@@ -58,12 +68,14 @@ export {
   userA,
   userB,
   userC,
+  userD,
   user2,
   user2A,
   user2B,
   user2C,
   user2D,
   user3,
+  profile,
   post1,
   post2,
 };

@@ -1,6 +1,5 @@
-import { PostsService, UserService } from '../services/index';
+import { PostsService } from '../services/index';
 
-const { findById } = UserService;
 const {
   publishNewPost,
   editPost,
@@ -13,18 +12,17 @@ export default class PostController {
     try {
       const { _id } = req.decoded.user;
       const { post } = req.body;
-      const getUser = await findById(_id);
-      if (getUser) {
-        const postDetails = { post };
-        await publishNewPost(_id, postDetails);
-        return res.status(200).json({
-          success: true,
-          message: 'post published.'
+      if (!post) {
+        return res.status(400).json({
+          error: true,
+          message: 'Please include your text in the text field to continue.'
         });
       }
-      return res.status(400).json({
-        success: false,
-        error: 'an error occured.'
+      const postDetails = { post };
+      await publishNewPost(_id, postDetails);
+      return res.status(200).json({
+        success: true,
+        message: 'post published.'
       });
     } catch (error) {
       return res.status(500).json({
@@ -39,6 +37,12 @@ export default class PostController {
     const { _id } = req.decoded.user;
     try {
       const getPost = await findPostById(_id, postId);
+      if (getPost.posts.length <= 0) {
+        return res.status(404).json({
+          error: true,
+          message: 'post not found.'
+        });
+      }
       if (getPost.posts[0]._id == postId) {
         return res.status(200).json({
           success: true,
@@ -46,10 +50,6 @@ export default class PostController {
           data: getPost
         });
       }
-      return res.status(404).json({
-        success: false,
-        error: 'post not found.'
-      });
     } catch (error) {
       return res.status(500).json({
         error: true,
@@ -63,22 +63,31 @@ export default class PostController {
     const { _id } = req.decoded.user;
     const { post } = req.body;
     try {
-      const findUser = await findById(_id);
-      if (findUser) {
-        const editDetails = {
-          post
-        };
-        await editPost(_id, postId, editDetails);
-        return res.status(200).json({
-          success: true,
-          message: 'post editted successfully.',
-          post: editDetails.post
+      if (!post) {
+        return res.status(400).json({
+          error: true,
+          message: 'Please include your edit text in the text field to continue.'
         });
+      } else {
+        // confirm user owns a post he wants to edit
+        const checkPost = await findPostById(_id, postId);
+        if (checkPost.posts.length <= 0) {
+          return res.status(401).json({
+            error: true,
+            message: "you're. not allowed to edit this post."
+          });
+        } else {
+          const editDetails = {
+            post
+          };
+          await editPost(_id, postId, editDetails);
+          return res.status(200).json({
+            success: true,
+            message: 'post editted successfully.',
+            post: editDetails.post
+          });
+        }
       }
-      return res.status(400).json({
-        success: false,
-        error: 'sorry, an error occured.'
-      });
     } catch (error) {
       return res.status(500).json({
         error: true,
@@ -99,8 +108,8 @@ export default class PostController {
         });
       }
       return res.status(404).json({
-        success: false,
-        error: 'post not found.'
+        error: true,
+        message: 'post not found.'
       });
     } catch (error) {
       return res.status(500).json({

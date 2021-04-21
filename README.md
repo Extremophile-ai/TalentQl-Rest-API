@@ -22,7 +22,7 @@ All API requests are made by sending a secure HTTPS request using one of the fol
 - POST Creates a new resource.
 - GET Gets a resource or list of resources.
 - PATCH updates a resource.
-- DELETE deletes a resource.
+- DELETE deletes a resource. x
 > For POST, the body of your request must be a JSON payload.
 
 ## HTTP Response Codes

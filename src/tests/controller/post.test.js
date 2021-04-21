@@ -37,6 +37,17 @@ describe('should handle single user posts functionality', () => {
           done();
         });
     });
+    it('/posts/update_post/:postId should not allow authenticated user to create a post with empty text field', (done) => {
+      chai
+        .request(server)
+        .patch('/posts/add_new_post')
+        .set('Authorization', `Bearer ${userToken}`)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property('message').eql('Please include your text in the text field to continue.');
+          done();
+        });
+    });
     it('/posts/add_new_post should let an authenticated user create new post', (done) => {
       chai
         .request(server)
@@ -64,7 +75,7 @@ describe('should handle single user posts functionality', () => {
           done();
         });
     });
-    it('/posts/:postId should get a single post', (done) => {
+    it('/posts/:postId should get own post', (done) => {
       chai
         .request(server)
         .get('/posts/605f83b5ba67ca5d6b515af8')
@@ -87,7 +98,30 @@ describe('should handle single user posts functionality', () => {
           done();
         });
     });
-    it("/posts/update_post/:postId should update a logged in user's post", (done) => {
+    it('/posts/update_post/:postId should not let authenticated user edit another user posts', (done) => {
+      chai
+        .request(server)
+        .patch('/posts/update_post/605f83b5ba78ca5d6b515af8')
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(post2)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('message').eql("you're. not allowed to edit this post.");
+          done();
+        });
+    });
+    it('/posts/update_post/:postId should instruct authenticated user to add a text field', (done) => {
+      chai
+        .request(server)
+        .patch('/posts/update_post/605f83b5ba78ca5d6b515af8')
+        .set('Authorization', `Bearer ${userToken}`)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property('message').eql('Please include your edit text in the text field to continue.');
+          done();
+        });
+    });
+    it('/posts/update_post/:postId should update a logged in Own post', (done) => {
       chai
         .request(server)
         .patch('/posts/update_post/605f83b5ba67ca5d6b515af8')
@@ -117,7 +151,7 @@ describe('should handle single user posts functionality', () => {
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.have
-            .property('error')
+            .property('message')
             .eql('post not found.');
           done();
         });

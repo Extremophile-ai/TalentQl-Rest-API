@@ -24,4 +24,12 @@ export default class UserService {
       return error;
     }
   }
+
+  static async updateUserProfile(_id, updateDetails) {
+    try {
+      return await User.findByIdAndUpdate(_id, updateDetails, { new: true });
+    } catch (error) {
+      return error;
+    }
+  }
 }

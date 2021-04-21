@@ -6,12 +6,13 @@ import {
   userA,
   userB,
   userC,
+  userD,
   user2,
   user2A,
   user2B,
   user2C,
-  user2D
-
+  user2D,
+  profile,
 } from './user-data';
 
 chai.should();
@@ -53,6 +54,31 @@ describe('Should handle correct user behaviour', async () => {
           done();
         });
     });
+    it('it should not create a user if data is not suplied', (done) => {
+      chai
+        .request(server)
+        .post('/user/signup')
+        .set('Accept', 'application/json')
+        .send(userD)
+        .end((err, res) => {
+          res.should.have.status(400);
+          done();
+        });
+    });
+    it('it should not create a user with an already registered email', (done) => {
+      chai
+        .request(server)
+        .post('/user/signup')
+        .set('Accept', 'application/json')
+        .send(userC)
+        .end((err, res) => {
+          res.should.have.status(409);
+          res.body.should.have
+            .property('message')
+            .eql('Sorry, an account is already registered with this email.');
+          done();
+        });
+    });
     it('it should create a user with complete and validated details successfully', (done) => {
       chai
         .request(server)
@@ -66,17 +92,6 @@ describe('Should handle correct user behaviour', async () => {
           res.body.should.have
             .property('message')
             .eql('New user account created successfully.');
-          done();
-        });
-    });
-    it('it should not create a user with an already registered email', (done) => {
-      chai
-        .request(server)
-        .post('/user/signup')
-        .set('Accept', 'application/json')
-        .send(userC)
-        .end((err, res) => {
-          res.should.have.status(409);
           done();
         });
     });
@@ -145,6 +160,129 @@ describe('Should handle correct user behaviour', async () => {
           res.should.have.status(200);
           res.body.should.be.a('object');
           res.body.should.have.property('message').eql('logged in successfully.');
+          done();
+        });
+    });
+  });
+  describe('/user/profile/update should handle user profle funcionalities', () => {
+    let userToken;
+    let expiredToken;
+    before((done) => {
+      chai
+        .request(server)
+        .post('/user/login')
+        .set('Accept', 'application/json')
+        .send(user2)
+        .end((err, res) => {
+          if (err) throw err;
+          userToken = res.body.token;
+          done();
+        });
+    });
+    it('should not let user with expired session update profile', (done) => {
+      chai
+        .request(server)
+        .patch('/user/profile/update')
+        .set('Authorization', `Bearer ${expiredToken}`)
+        .send(profile)
+        .end((err, res) => {
+          res.should.have.status(410);
+          res.body.should.have.property('message').eql('Session expired, you have to login.');
+          done();
+        });
+    });
+    it('should not let un-authenticated user update profile', (done) => {
+      chai
+        .request(server)
+        .patch('/user/profile/update')
+        .send(profile)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('message').eql('Sorry, you have to login.');
+          done();
+        });
+    });
+    it("should update an authenticated user's profile", (done) => {
+      chai
+        .request(server)
+        .patch('/user/profile/update')
+        .set('Authorization', `Bearer ${userToken}`)
+        .send(profile)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('success').eql(true);
+          res.body.should.have.property('message').eql('Profile update was successful.');
+          done();
+        });
+    });
+  });
+  describe('user/feeds should handle display of feeds for users', () => {
+    let userToken;
+    before((done) => {
+      chai
+        .request(server)
+        .post('/user/login')
+        .set('Accept', 'application/json')
+        .send(user2)
+        .end((err, res) => {
+          if (err) throw err;
+          userToken = res.body.token;
+          done();
+        });
+    });
+    it('should not let un-authenticated user view post of other users', (done) => {
+      chai
+        .request(server)
+        .get('/user/post/605f83b5ba67ca5d6b515af8')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('message').eql('Sorry, you have to login.');
+          done();
+        });
+    });
+    it('should not show deleted or non-existent posts to authenticated user', (done) => {
+      chai
+        .request(server)
+        .get('/user/post/605f83b6ba67ca5d6b515af3')
+        .set('Authorization', `Bearer ${userToken}`)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property('error').eql(true);
+          res.body.should.have.property('message').eql('Sorry, this post does not exist or may have been deleted by the author.');
+          done();
+        });
+    });
+    it('should show other users posts to other authenticated users', (done) => {
+      chai
+        .request(server)
+        .get('/user/post/605f83b5ba67ca5d6b515af8')
+        .set('Authorization', `Bearer ${userToken}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('success').eql(true);
+          res.body.should.have.property('message').eql('post retrieved successfully');
+          done();
+        });
+    });
+    it('should not display feeds to un-authenticated users', (done) => {
+      chai
+        .request(server)
+        .get('/user/post/feeds')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property('message').eql('Sorry, you have to login.');
+          done();
+        });
+    });
+    it('should display feeds an authenticated user', (done) => {
+      chai
+        .request(server)
+        .get('/user/post/feeds')
+        .set('Authorization', `Bearer ${userToken}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property('success').eql(true);
+          res.body.should.have.property('message').eql('Feeds retrieved successfully');
           done();
         });
     });

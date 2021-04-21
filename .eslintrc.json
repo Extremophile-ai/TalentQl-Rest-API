@@ -19,7 +19,11 @@
         "consistent-return":"off",
         "no-underscore-dangle":"off",
         "comma-dangle":"off",
+        "no-plusplus":"off",
         "eqeqeq":"off",
-        "no-undef": "off"
+        "no-undef": "off",
+        "prefer-const":"off",
+        "arrow-body-style":"off",
+        "no-else-return":"off"
     }
 }

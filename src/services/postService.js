@@ -1,13 +1,13 @@
 import User from '../models/index';
 
 export default class PostsService {
-//   static async getAllPostsFromUser() {
-//     try {
-//       return await User.find();
-//     } catch (error) {
-//       return error;
-//     }
-//   }
+  static async getAllPosts() {
+    try {
+      return await User.find({});
+    } catch (error) {
+      return error;
+    }
+  }
 
   static async publishNewPost(_id, postDetails) {
     try {
@@ -63,6 +63,16 @@ export default class PostsService {
           },
         },
       );
+    } catch (error) {
+      return error;
+    }
+  }
+
+  static async viewOtherUsersPost(postId) {
+    try {
+      return await User.find({
+        'posts._id': postId
+      });
     } catch (error) {
       return error;
     }

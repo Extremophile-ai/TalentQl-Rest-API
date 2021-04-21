@@ -11,6 +11,17 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  firstName: {
+    type: String,
+    lowercase: true,
+  },
+  lastName: {
+    type: String,
+    lowercase: true,
+  },
+  phone: {
+    type: String,
+  },
   posts: [
     {
       post: {
